@@ -578,6 +578,20 @@ int background_functions(
       \f$ \rho_{class} = [8 \pi G \rho_{physical} / 3 c^2]\f$ */
   pvecback[pba->index_bg_H] = sqrt(rho_tot-pba->K/a/a);
 
+  /* ========================================================= */
+  /* UTIS background smoke-call: no geometry modification       */
+  /* ========================================================= */
+  {
+    struct utis_background_state utis_bg;
+
+    class_call(utis_update_background(&(pba->utis),
+                                      pvecback[pba->index_bg_time],
+                                      &utis_bg),
+               pba->utis.error_message,
+               pba->error_message);
+  }
+
+
   /** - compute derivative of H with respect to conformal time */
   pvecback[pba->index_bg_H_prime] = - (3./2.) * (rho_tot + p_tot) * a + pba->K/a;
 

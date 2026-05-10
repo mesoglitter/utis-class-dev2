@@ -4,6 +4,7 @@
 #define __BACKGROUND__
 
 #include "common.h"
+#include "utis.h"
 #include "quadrature.h"
 #include "growTable.h"
 #include "arrays.h"
@@ -278,6 +279,10 @@ struct background
 
 
   //@{
+
+
+  /* UTIS model parameters */
+  struct utis_parameters utis;
 
   short has_cdm;       /**< presence of cold dark matter? */
   short has_idm;       /**< presence of interacting dark matter with photons, baryons, and idr */

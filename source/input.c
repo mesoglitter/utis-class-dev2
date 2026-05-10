@@ -3200,6 +3200,51 @@ int input_read_parameters_species(struct file_content * pfc,
   class_call(parser_read_double(pfc,"Omega_scf",&param3,&flag3,errmsg),
              errmsg,
              errmsg);
+
+  /* ========================================================= */
+  /* UTIS parameters                                           */
+  /* ========================================================= */
+
+  pba->utis.has_utis = _FALSE_;
+
+  class_call(parser_read_string(pfc,
+                                "has_utis",
+                                &string1,
+                                &flag1,
+                                errmsg),
+             errmsg,
+             errmsg);
+
+  if (flag1 == _TRUE_) {
+
+    if ((strstr(string1,"y") != NULL) ||
+        (strstr(string1,"Y") != NULL)) {
+
+      pba->utis.has_utis = _TRUE_;
+    }
+  }
+
+  pba->utis.S0_soft = 0.02;
+
+  class_call(parser_read_double(pfc,
+                                "utis_S0",
+                                &(pba->utis.S0_soft),
+                                &flag1,
+                                errmsg),
+             errmsg,
+             errmsg);
+
+  pba->utis.theta_ini = 0.0;
+
+  class_call(parser_read_double(pfc,
+                                "utis_theta_ini",
+                                &(pba->utis.theta_ini),
+                                &flag1,
+                                errmsg),
+             errmsg,
+             errmsg);
+
+
   /* Test */
   class_test((flag1 == _TRUE_) && (flag2 == _TRUE_) && ((flag3 == _FALSE_) || (param3 >= 0.)),
              errmsg,
