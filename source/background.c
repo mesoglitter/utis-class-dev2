@@ -436,7 +436,69 @@ int background_functions(
 
   /* cdm */
   if (pba->has_cdm == _TRUE_) {
-    pvecback[pba->index_bg_rho_cdm] = pba->Omega0_cdm * pow(pba->H0,2) / pow(a,3);
+
+    pvecback[pba->index_bg_rho_cdm] =
+      pba->Omega0_cdm * pow(pba->H0,2) / pow(a,3);
+
+    /* ========================================================= */
+    /* UTIS dry-run bridge                                       */
+    /* ========================================================= */
+    if (pba->utis.has_utis == _TRUE_) {
+
+      struct utis_fraction_state utis_frac;
+      struct utis_fluid_state utis_fluid;
+      struct utis_background_state utis_bg;
+
+      int i;
+
+      for (i=0; i<_UTIS_N_FLAVOR_; i++) {
+
+        utis_frac.f[i] = 0.0;
+        utis_frac.df[i] = 0.0;
+
+        utis_fluid.rho[i] = 0.0;
+        utis_fluid.p[i] = 0.0;
+
+        utis_fluid.w[i] = 0.0;
+        utis_fluid.cs2[i] = 0.0;
+      }
+
+      utis_frac.f[index_utis_gyeong] = 1.0;
+      utis_frac.total_fraction = 1.0;
+
+      class_call(
+        utis_update_background(
+          &(pba->utis),
+          pvecback[pba->index_bg_time],
+          &utis_bg
+        ),
+        pba->utis.error_message,
+        pba->error_message
+      );
+
+      class_call(
+        utis_update_fractions(
+          &(pba->utis),
+          &utis_bg,
+          &utis_frac
+        ),
+        pba->utis.error_message,
+        pba->error_message
+      );
+
+      class_call(
+        utis_update_fluid_density(
+          &(pba->utis),
+          &utis_bg,
+          &utis_frac,
+          &utis_fluid,
+          pvecback[pba->index_bg_rho_cdm]
+        ),
+        pba->utis.error_message,
+        pba->error_message
+      );
+    }
+
     rho_tot += pvecback[pba->index_bg_rho_cdm];
     p_tot += 0.;
     rho_m += pvecback[pba->index_bg_rho_cdm];
@@ -1182,6 +1244,38 @@ int background_indices(
   /* -> scalar field and its derivative wrt conformal time (Zuma) */
   class_define_index(pba->index_bi_phi_scf,pba->has_scf,index_bi,1);
   class_define_index(pba->index_bi_phi_prime_scf,pba->has_scf,index_bi,1);
+
+  /* ========================================================= */
+  /* UTIS fraction trackers (dormant allocation stage)         */
+  /* ========================================================= */
+
+  class_define_index(
+    pba->index_bi_utis_f_gap,
+    pba->utis.has_utis,
+    index_bi,
+    1
+  );
+
+  class_define_index(
+    pba->index_bi_utis_f_eul,
+    pba->utis.has_utis,
+    index_bi,
+    1
+  );
+
+  class_define_index(
+    pba->index_bi_utis_f_gyeong,
+    pba->utis.has_utis,
+    index_bi,
+    1
+  );
+
+  class_define_index(
+    pba->index_bi_utis_f_shin,
+    pba->utis.has_utis,
+    index_bi,
+    1
+  );
 
   /* End of {B} variables */
   pba->bi_B_size = index_bi;
@@ -2340,6 +2434,21 @@ int background_initial_conditions(
   pvecback_integration[pba->index_bi_D] = 1.;
   pvecback_integration[pba->index_bi_D_prime] = 2.*a*pvecback[pba->index_bg_H];
 
+  /* ========================================================= */
+  /* UTIS initial fraction tracker conditions                  */
+  /* ========================================================= */
+
+  if (pba->utis.has_utis == _TRUE_) {
+
+    pvecback_integration[pba->index_bi_utis_f_gap] = 0.0;
+
+    pvecback_integration[pba->index_bi_utis_f_eul] = 0.0;
+
+    pvecback_integration[pba->index_bi_utis_f_gyeong] = 1.0;
+
+    pvecback_integration[pba->index_bi_utis_f_shin] = 0.0;
+  }
+
   /** - return the value finally chosen for the initial log(a) */
   *loga_ini = log(a);
 
@@ -2679,6 +2788,61 @@ int background_derivs(
         written as \f$ d\phi/dlna = phi' / (aH) \f$ and \f$ d\phi'/dlna = -2*phi' - (a/H) dV \f$ */
     dy[pba->index_bi_phi_scf] = y[pba->index_bi_phi_prime_scf]/a/H;
     dy[pba->index_bi_phi_prime_scf] = - 2*y[pba->index_bi_phi_prime_scf] - a*dV_scf(pba,y[pba->index_bi_phi_scf])/H ;
+  }
+
+  /* ========================================================= */
+  /* UTIS fraction tracker evolution                           */
+  /* dy is d/dlog(a), while utis_update_fractions gives d/dtau  */
+  /* ========================================================= */
+
+  if (pba->utis.has_utis == _TRUE_) {
+
+    struct utis_background_state utis_bg = {0};
+    struct utis_fraction_state utis_frac = {0};
+
+    utis_frac.f[index_utis_gap] =
+      y[pba->index_bi_utis_f_gap];
+
+    utis_frac.f[index_utis_eul] =
+      y[pba->index_bi_utis_f_eul];
+
+    utis_frac.f[index_utis_gyeong] =
+      y[pba->index_bi_utis_f_gyeong];
+
+    utis_frac.f[index_utis_shin] =
+      y[pba->index_bi_utis_f_shin];
+
+    class_call(
+      utis_update_background(
+        &(pba->utis),
+        y[pba->index_bi_tau],
+        &utis_bg
+      ),
+      pba->utis.error_message,
+      error_message
+    );
+
+    class_call(
+      utis_update_fractions(
+        &(pba->utis),
+        &utis_bg,
+        &utis_frac
+      ),
+      pba->utis.error_message,
+      error_message
+    );
+
+    dy[pba->index_bi_utis_f_gap] =
+      utis_frac.df[index_utis_gap] / a / H;
+
+    dy[pba->index_bi_utis_f_eul] =
+      utis_frac.df[index_utis_eul] / a / H;
+
+    dy[pba->index_bi_utis_f_gyeong] =
+      utis_frac.df[index_utis_gyeong] / a / H;
+
+    dy[pba->index_bi_utis_f_shin] =
+      utis_frac.df[index_utis_shin] / a / H;
   }
 
   return _SUCCESS_;

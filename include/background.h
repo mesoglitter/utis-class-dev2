@@ -253,7 +253,16 @@ struct background
 
   //@{
 
-  int index_bi_rho_dcdm;/**< {B} dcdm density */
+  /* ========================================================= */
+  /* UTIS background integration indices (fraction trackers)   */
+  /* ========================================================= */
+
+  int index_bi_utis_f_gap;
+  int index_bi_utis_f_eul;
+  int index_bi_utis_f_gyeong;
+  int index_bi_utis_f_shin;
+
+  int index_bi_rho_dcdm; /**< {B} dcdm density */
   int index_bi_rho_dr;  /**< {B} dr density */
   int index_bi_rho_fld; /**< {B} fluid density */
   int index_bi_phi_scf;       /**< {B} scalar field value */

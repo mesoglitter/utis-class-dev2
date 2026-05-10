@@ -233,6 +233,82 @@ int utis_update_fractions(
  * free
  * ============================================================ */
 
+
+/* ============================================================
+ * fluid density algebraic translator
+ * ============================================================ */
+
+int utis_update_fluid_density(
+  struct utis_parameters * putis,
+  struct utis_background_state * pub,
+  struct utis_fraction_state * puf,
+  struct utis_fluid_state * pufl,
+  double rho_cdm_current
+){
+
+  (void)pub;
+
+  if (putis->has_utis == _FALSE_) {
+
+    pufl->rho_total = rho_cdm_current;
+    pufl->p_total = 0.0;
+
+    pufl->rho[index_utis_gap] = 0.0;
+    pufl->rho[index_utis_eul] = 0.0;
+    pufl->rho[index_utis_gyeong] = rho_cdm_current;
+    pufl->rho[index_utis_shin] = 0.0;
+
+    pufl->p[index_utis_gap] = 0.0;
+    pufl->p[index_utis_eul] = 0.0;
+    pufl->p[index_utis_gyeong] = 0.0;
+    pufl->p[index_utis_shin] = 0.0;
+
+    pufl->w[index_utis_gap] = 0.0;
+    pufl->w[index_utis_eul] = 0.0;
+    pufl->w[index_utis_gyeong] = 0.0;
+    pufl->w[index_utis_shin] = 0.0;
+
+    pufl->cs2[index_utis_gap] = 0.0;
+    pufl->cs2[index_utis_eul] = 0.0;
+    pufl->cs2[index_utis_gyeong] = 0.0;
+    pufl->cs2[index_utis_shin] = 0.0;
+
+    return _SUCCESS_;
+  }
+
+  pufl->rho_total = rho_cdm_current;
+  pufl->p_total = 0.0;
+
+  pufl->rho[index_utis_gap] =
+    rho_cdm_current * puf->f[index_utis_gap];
+
+  pufl->rho[index_utis_eul] =
+    rho_cdm_current * puf->f[index_utis_eul];
+
+  pufl->rho[index_utis_gyeong] =
+    rho_cdm_current * puf->f[index_utis_gyeong];
+
+  pufl->rho[index_utis_shin] =
+    rho_cdm_current * puf->f[index_utis_shin];
+
+  pufl->w[index_utis_gap] = 0.0;
+  pufl->w[index_utis_eul] = 0.0;
+  pufl->w[index_utis_gyeong] = 0.0;
+  pufl->w[index_utis_shin] = 0.0;
+
+  pufl->p[index_utis_gap] = 0.0;
+  pufl->p[index_utis_eul] = 0.0;
+  pufl->p[index_utis_gyeong] = 0.0;
+  pufl->p[index_utis_shin] = 0.0;
+
+  pufl->cs2[index_utis_gap] = 1.0;
+  pufl->cs2[index_utis_eul] = 0.01;
+  pufl->cs2[index_utis_gyeong] = 0.0;
+  pufl->cs2[index_utis_shin] = 0.0;
+
+  return _SUCCESS_;
+}
+
 int utis_free(
   struct utis_parameters * putis
 ){

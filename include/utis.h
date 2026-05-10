@@ -70,6 +70,19 @@ struct utis_fraction_state {
   double total_fraction;
 };
 
+
+struct utis_fluid_state {
+
+  double rho[_UTIS_N_FLAVOR_];
+  double p[_UTIS_N_FLAVOR_];
+
+  double w[_UTIS_N_FLAVOR_];
+  double cs2[_UTIS_N_FLAVOR_];
+
+  double rho_total;
+  double p_total;
+};
+
 int utis_init(
   struct utis_parameters * putis
 );
@@ -84,6 +97,15 @@ int utis_update_fractions(
   struct utis_parameters * putis,
   struct utis_background_state * pub,
   struct utis_fraction_state * puf
+);
+
+
+int utis_update_fluid_density(
+  struct utis_parameters * putis,
+  struct utis_background_state * pub,
+  struct utis_fraction_state * puf,
+  struct utis_fluid_state * pufl,
+  double rho_cdm_current
 );
 
 int utis_free(
