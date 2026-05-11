@@ -6543,6 +6543,7 @@ int perturbations_einstein(
 
   double k2,a,a2,a_prime_over_a;
   double s2_squared;
+  double utis_current_clustering = 1.0;
   double shear_g = 0.;
   double shear_idr = 0.;
 
@@ -6553,6 +6554,18 @@ int perturbations_einstein(
   a2 = a * a;
   a_prime_over_a = ppw->pvecback[pba->index_bg_H]*a;
   s2_squared = 1.-3.*pba->K/k2;
+
+  /* ========================================================= */
+  /* UTIS read-only bridge                                     */
+  /* ========================================================= */
+
+  if (pba->utis.has_utis == _TRUE_) {
+
+    utis_current_clustering =
+      ppw->pvecback[pba->index_bg_utis_clustering_fraction];
+  }
+
+  (void)utis_current_clustering;
 
   /** - sum up perturbations from all species */
   class_call(perturbations_total_stress_energy(ppr,pba,pth,ppt,index_md,k,y,ppw),
