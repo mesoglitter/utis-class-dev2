@@ -463,8 +463,27 @@ int background_functions(
         utis_fluid.cs2[i] = 0.0;
       }
 
-      utis_frac.f[index_utis_gyeong] = 1.0;
-      utis_frac.total_fraction = 1.0;
+      utis_frac.f[index_utis_gap] =
+        pvecback_B[pba->index_bi_utis_f_gap];
+
+      utis_frac.f[index_utis_eul] =
+        pvecback_B[pba->index_bi_utis_f_eul];
+
+      utis_frac.f[index_utis_gyeong] =
+        pvecback_B[pba->index_bi_utis_f_gyeong];
+
+      utis_frac.f[index_utis_shin] =
+        pvecback_B[pba->index_bi_utis_f_shin];
+
+      utis_frac.total_fraction =
+        utis_frac.f[index_utis_gap]
+        + utis_frac.f[index_utis_eul]
+        + utis_frac.f[index_utis_gyeong]
+        + utis_frac.f[index_utis_shin];
+
+      pvecback[pba->index_bg_utis_clustering_fraction] =
+        utis_frac.f[index_utis_gyeong]
+        + utis_frac.f[index_utis_shin];
 
       class_call(
         utis_update_background(
