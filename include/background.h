@@ -174,6 +174,8 @@ struct background
   int index_bg_rho_dcdm;      /**< dcdm density */
   int index_bg_rho_dr;        /**< dr density */
 
+  int index_bg_utis_clustering_fraction; /**< UTIS clustering fraction */
+
   int index_bg_phi_scf;       /**< scalar field value */
   int index_bg_phi_prime_scf; /**< scalar field derivative wrt conformal time */
   int index_bg_V_scf;         /**< scalar field potential V */

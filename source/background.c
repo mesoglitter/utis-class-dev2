@@ -1139,6 +1139,9 @@ int background_indices(
   /* - index for dr */
   class_define_index(pba->index_bg_rho_dr,pba->has_dr,index_bg,1);
 
+  /* - index for UTIS clustering fraction */
+  class_define_index(pba->index_bg_utis_clustering_fraction,pba->utis.has_utis,index_bg,1);
+
   /* - indices for scalar field */
   class_define_index(pba->index_bg_phi_scf,pba->has_scf,index_bg,1);
   class_define_index(pba->index_bg_phi_prime_scf,pba->has_scf,index_bg,1);
