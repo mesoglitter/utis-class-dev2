@@ -481,9 +481,10 @@ int background_functions(
         + utis_frac.f[index_utis_gyeong]
         + utis_frac.f[index_utis_shin];
 
-      pvecback[pba->index_bg_utis_clustering_fraction] =
-        utis_frac.f[index_utis_gyeong]
-        + utis_frac.f[index_utis_shin];
+      /* ========================================================= */
+      /* UTIS Stage 1 Test: hardcoded toy suppression               */
+      /* ========================================================= */
+      pvecback[pba->index_bg_utis_clustering_fraction] = 0.90;
 
       class_call(
         utis_update_background(
