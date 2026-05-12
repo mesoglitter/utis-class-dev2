@@ -531,17 +531,6 @@ int background_functions(
           pvecback[pba->index_bg_utis_clustering_fraction] = 1.0;
         }
 
-        printf(
-          "UTIS DEBUG a=%e gap=%e eul=%e gyeong=%e shin=%e raw=%e S0=%e clustering=%e\n",
-          a,
-          utis_frac.f[index_utis_gap],
-          utis_frac.f[index_utis_eul],
-          utis_frac.f[index_utis_gyeong],
-          utis_frac.f[index_utis_shin],
-          utis_raw_clustering,
-          pba->utis.S0_soft,
-          pvecback[pba->index_bg_utis_clustering_fraction]
-        );
       }
 
       class_call(

@@ -6766,8 +6766,28 @@ int perturbations_total_stress_energy(
   double utis_current_clustering = 1.0;
 
   if (pba->utis.has_utis == _TRUE_) {
+
+    double utis_k2_factor;
+    double utis_kc2;
+
+    utis_kc2 =
+      pba->utis.kc
+      * pba->utis.kc;
+
+    utis_k2_factor =
+      k * k
+      / (
+          k * k
+          + utis_kc2
+        );
+
     utis_current_clustering =
-      ppw->pvecback[pba->index_bg_utis_clustering_fraction];
+      1.0
+      - utis_k2_factor
+      * (
+          1.0
+          - ppw->pvecback[pba->index_bg_utis_clustering_fraction]
+        );
   }
 
   /** Summary: */

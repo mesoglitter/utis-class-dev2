@@ -25,6 +25,8 @@ struct utis_parameters {
   double gate_at;
   double gate_p;
 
+  double kc;
+
   double A_gye;
   double A_byeong;
   double A_jeong;

@@ -3274,6 +3274,21 @@ int input_read_parameters_species(struct file_content * pfc,
     class_test(pba->utis.gate_p <= 0.0,
                errmsg,
                "utis_gate_p must be positive");
+
+
+    pba->utis.kc = 0.05;
+
+    class_call(parser_read_double(pfc,
+                                  "utis_kc",
+                                  &(pba->utis.kc),
+                                  &flag_utis,
+                                  errmsg),
+               errmsg,
+               errmsg);
+
+    class_test(pba->utis.kc <= 1.0e-10,
+               errmsg,
+               "utis_kc must be larger than 1e-10 in 1/Mpc units");
   }
 
 
