@@ -22,6 +22,9 @@ struct utis_parameters {
 
   double S0_soft;
 
+  double gate_at;
+  double gate_p;
+
   double A_gye;
   double A_byeong;
   double A_jeong;

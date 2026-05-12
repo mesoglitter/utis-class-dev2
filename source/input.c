@@ -3246,6 +3246,34 @@ int input_read_parameters_species(struct file_content * pfc,
                                   errmsg),
                errmsg,
                errmsg);
+
+    pba->utis.gate_at = 0.5;
+
+    class_call(parser_read_double(pfc,
+                                  "utis_gate_at",
+                                  &(pba->utis.gate_at),
+                                  &flag_utis,
+                                  errmsg),
+               errmsg,
+               errmsg);
+
+    pba->utis.gate_p = 6.0;
+
+    class_call(parser_read_double(pfc,
+                                  "utis_gate_p",
+                                  &(pba->utis.gate_p),
+                                  &flag_utis,
+                                  errmsg),
+               errmsg,
+               errmsg);
+
+    class_test(pba->utis.gate_at <= 0.0,
+               errmsg,
+               "utis_gate_at must be positive");
+
+    class_test(pba->utis.gate_p <= 0.0,
+               errmsg,
+               "utis_gate_p must be positive");
   }
 
 

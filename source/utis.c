@@ -27,12 +27,8 @@ int utis_init(
   struct utis_parameters * putis
 ){
 
-  putis->has_utis = _FALSE_;
-
   putis->theta_ini = 0.0;
   putis->relay_width = 0.05;
-
-  putis->S0_soft = 0.02;
 
   putis->A_gye = 1.0;
   putis->A_byeong = 1.0;
@@ -146,10 +142,25 @@ int utis_update_background(
   pub->Gamma_34 =
     utis_clip_rate(
       putis->gamma_34_0
-      * pub->T_im,
+      * (
+        pub->T_im
+        + 1.0e-3
+      ),
       0.0,
       putis->max_rate
     );
+
+  printf(
+    "UTIS GAMMA DEBUG tau=%e theta=%e W_eum=%e T_im=%e gamma34_0=%e max_rate=%e raw34=%e G34=%e\n",
+    tau,
+    theta,
+    W_eum,
+    pub->T_im,
+    putis->gamma_34_0,
+    putis->max_rate,
+    putis->gamma_34_0 * (pub->T_im + 1.0e-3),
+    pub->Gamma_34
+  );
 
   pub->Gamma_41 =
     utis_clip_rate(

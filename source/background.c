@@ -481,17 +481,73 @@ int background_functions(
         + utis_frac.f[index_utis_gyeong]
         + utis_frac.f[index_utis_shin];
 
+      if ((utis_frac.total_fraction <= 0.0) ||
+          (utis_frac.total_fraction > 1.0e3) ||
+          (utis_frac.f[index_utis_gap] < -1.0e-8) ||
+          (utis_frac.f[index_utis_eul] < -1.0e-8) ||
+          (utis_frac.f[index_utis_gyeong] < -1.0e-8) ||
+          (utis_frac.f[index_utis_shin] < -1.0e-8)) {
+
+        utis_frac.f[index_utis_gap] = 0.0;
+        utis_frac.f[index_utis_eul] = 0.0;
+        utis_frac.f[index_utis_gyeong] = 1.0;
+        utis_frac.f[index_utis_shin] = 0.0;
+        utis_frac.total_fraction = 1.0;
+      }
+
       /* ========================================================= */
-      /* UTIS Stage B: real fraction-based clustering               */
+      /* UTIS Stage B: S0-controlled observable clustering          */
+      /* raw = gyeong + shin, S0 controls observable suppression    */
+      /* S0=0 -> LCDM-like clustering=1, S0=1 -> full UTIS raw      */
       /* ========================================================= */
-      pvecback[pba->index_bg_utis_clustering_fraction] =
-        utis_frac.f[index_utis_gyeong]
-        + utis_frac.f[index_utis_shin];
+      {
+        double utis_raw_clustering =
+          utis_frac.f[index_utis_gyeong]
+          + utis_frac.f[index_utis_shin];
+
+        {
+          double utis_gate_p = pba->utis.gate_p;
+          double utis_gate_at = pba->utis.gate_at;
+
+          double utis_gate =
+            pow(a, utis_gate_p)
+            / (
+                pow(a, utis_gate_p)
+                + pow(utis_gate_at, utis_gate_p)
+              );
+
+          pvecback[pba->index_bg_utis_clustering_fraction] =
+            1.0
+            - utis_gate
+            * pba->utis.S0_soft
+            * (1.0 - utis_raw_clustering);
+        }
+
+        if (pvecback[pba->index_bg_utis_clustering_fraction] < 0.0) {
+          pvecback[pba->index_bg_utis_clustering_fraction] = 0.0;
+        }
+
+        if (pvecback[pba->index_bg_utis_clustering_fraction] > 1.0) {
+          pvecback[pba->index_bg_utis_clustering_fraction] = 1.0;
+        }
+
+        printf(
+          "UTIS DEBUG a=%e gap=%e eul=%e gyeong=%e shin=%e raw=%e S0=%e clustering=%e\n",
+          a,
+          utis_frac.f[index_utis_gap],
+          utis_frac.f[index_utis_eul],
+          utis_frac.f[index_utis_gyeong],
+          utis_frac.f[index_utis_shin],
+          utis_raw_clustering,
+          pba->utis.S0_soft,
+          pvecback[pba->index_bg_utis_clustering_fraction]
+        );
+      }
 
       class_call(
         utis_update_background(
           &(pba->utis),
-          pvecback[pba->index_bg_time],
+          log(a) + pba->utis.theta_ini,
           &utis_bg
         ),
         pba->utis.error_message,
@@ -1085,6 +1141,15 @@ int background_indices(
   pba->has_idr = _FALSE_;
   pba->has_curvature = _FALSE_;
   pba->has_varconst  = _FALSE_;
+
+  /* ========================================================= */
+  /* UTIS: ensure defaults before input/indices use             */
+  /* ========================================================= */
+  class_call(
+    utis_init(&(pba->utis)),
+    pba->utis.error_message,
+    pba->error_message
+  );
 
   if (pba->Omega0_cdm != 0.)
     pba->has_cdm = _TRUE_;
@@ -2840,7 +2905,7 @@ int background_derivs(
     class_call(
       utis_update_background(
         &(pba->utis),
-        y[pba->index_bi_tau],
+        loga + pba->utis.theta_ini,
         &utis_bg
       ),
       pba->utis.error_message,
@@ -2857,17 +2922,62 @@ int background_derivs(
       error_message
     );
 
+    /* UTIS fractions evolve directly with log(a) */
     dy[pba->index_bi_utis_f_gap] =
-      utis_frac.df[index_utis_gap] / a / H;
+      utis_frac.df[index_utis_gap];
 
     dy[pba->index_bi_utis_f_eul] =
-      utis_frac.df[index_utis_eul] / a / H;
+      utis_frac.df[index_utis_eul];
 
     dy[pba->index_bi_utis_f_gyeong] =
-      utis_frac.df[index_utis_gyeong] / a / H;
+      utis_frac.df[index_utis_gyeong];
 
     dy[pba->index_bi_utis_f_shin] =
-      utis_frac.df[index_utis_shin] / a / H;
+      utis_frac.df[index_utis_shin];
+
+    printf(
+      "UTIS ODE a=%e tau=%e G12=%e G23=%e G34=%e G41=%e f=[%e,%e,%e,%e] df=[%e,%e,%e,%e] dy=[%e,%e,%e,%e]\n",
+      a,
+      y[pba->index_bi_tau],
+      utis_bg.Gamma_12,
+      utis_bg.Gamma_23,
+      utis_bg.Gamma_34,
+      utis_bg.Gamma_41,
+      utis_frac.f[index_utis_gap],
+      utis_frac.f[index_utis_eul],
+      utis_frac.f[index_utis_gyeong],
+      utis_frac.f[index_utis_shin],
+      utis_frac.df[index_utis_gap],
+      utis_frac.df[index_utis_eul],
+      utis_frac.df[index_utis_gyeong],
+      utis_frac.df[index_utis_shin],
+      dy[pba->index_bi_utis_f_gap],
+      dy[pba->index_bi_utis_f_eul],
+      dy[pba->index_bi_utis_f_gyeong],
+      dy[pba->index_bi_utis_f_shin]
+    );
+
+    printf(
+      "UTIS ODE a=%e tau=%e G12=%e G23=%e G34=%e G41=%e f=[%e,%e,%e,%e] df=[%e,%e,%e,%e] dy=[%e,%e,%e,%e]\n",
+      a,
+      y[pba->index_bi_tau],
+      utis_bg.Gamma_12,
+      utis_bg.Gamma_23,
+      utis_bg.Gamma_34,
+      utis_bg.Gamma_41,
+      utis_frac.f[index_utis_gap],
+      utis_frac.f[index_utis_eul],
+      utis_frac.f[index_utis_gyeong],
+      utis_frac.f[index_utis_shin],
+      utis_frac.df[index_utis_gap],
+      utis_frac.df[index_utis_eul],
+      utis_frac.df[index_utis_gyeong],
+      utis_frac.df[index_utis_shin],
+      dy[pba->index_bi_utis_f_gap],
+      dy[pba->index_bi_utis_f_eul],
+      dy[pba->index_bi_utis_f_gyeong],
+      dy[pba->index_bi_utis_f_shin]
+    );
   }
 
   return _SUCCESS_;
