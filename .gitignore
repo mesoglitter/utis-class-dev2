@@ -14,3 +14,6 @@ RealSpaceInterface/cache/
 .DS_Store
 doc/manual/html
 doc/manual/latex
+
+# huge UTIS scan files
+UTIS_theory/utis_fast_ckm_cp_scan_Q20B.csv

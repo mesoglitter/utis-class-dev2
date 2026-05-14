@@ -150,19 +150,7 @@ int utis_update_background(
       putis->max_rate
     );
 
-  printf(
-    "UTIS GAMMA DEBUG tau=%e theta=%e W_eum=%e T_im=%e gamma34_0=%e max_rate=%e raw34=%e G34=%e\n",
-    tau,
-    theta,
-    W_eum,
-    pub->T_im,
-    putis->gamma_34_0,
-    putis->max_rate,
-    putis->gamma_34_0 * (pub->T_im + 1.0e-3),
-    pub->Gamma_34
-  );
-
-  pub->Gamma_41 =
+  /* DEBUG PRINT REMOVED */pub->Gamma_41 =
     utis_clip_rate(
       putis->gamma_41_0
       * pub->M_gi

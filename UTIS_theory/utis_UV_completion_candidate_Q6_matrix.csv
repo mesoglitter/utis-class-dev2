@@ -1,0 +1,6 @@
+candidate,kernel_reproduction,alpha_bound_naturalness,IR_recovery,UV_finiteness,UTIS_12branch_fit,CKM_PMNS_extendability,risk,comment,total_score
+Emergent geometric condensate + auxiliary screened scalar,5,5,5,4,5,4,medium,"Best current candidate. chi is treated as collective screened mode, not particle ontology.",28
+Hidden gauge sector with massive mediator,5,4,4,4,3,5,medium-high,"Good for flavor extension, but gauge group and anomaly cancellation must be specified.",25
+Topological multi-branch vacuum,3,4,4,5,5,4,high,"Very aligned with 12-branch logic, but hardest to formulate rigorously.",25
+Nonlocal completion,5,3,4,3,3,2,high,"Kernel emerges easily, but locality/unitarity/causality become difficult.",20
+Pure phenomenological EFT only,5,2,4,2,2,1,medium,"Useful as paper prototype, but insufficient for unified-field claim.",16
