@@ -2924,50 +2924,7 @@ int background_derivs(
     dy[pba->index_bi_utis_f_shin] =
       utis_frac.df[index_utis_shin];
 
-    printf(
-      "UTIS ODE a=%e tau=%e G12=%e G23=%e G34=%e G41=%e f=[%e,%e,%e,%e] df=[%e,%e,%e,%e] dy=[%e,%e,%e,%e]\n",
-      a,
-      y[pba->index_bi_tau],
-      utis_bg.Gamma_12,
-      utis_bg.Gamma_23,
-      utis_bg.Gamma_34,
-      utis_bg.Gamma_41,
-      utis_frac.f[index_utis_gap],
-      utis_frac.f[index_utis_eul],
-      utis_frac.f[index_utis_gyeong],
-      utis_frac.f[index_utis_shin],
-      utis_frac.df[index_utis_gap],
-      utis_frac.df[index_utis_eul],
-      utis_frac.df[index_utis_gyeong],
-      utis_frac.df[index_utis_shin],
-      dy[pba->index_bi_utis_f_gap],
-      dy[pba->index_bi_utis_f_eul],
-      dy[pba->index_bi_utis_f_gyeong],
-      dy[pba->index_bi_utis_f_shin]
-    );
-
-    printf(
-      "UTIS ODE a=%e tau=%e G12=%e G23=%e G34=%e G41=%e f=[%e,%e,%e,%e] df=[%e,%e,%e,%e] dy=[%e,%e,%e,%e]\n",
-      a,
-      y[pba->index_bi_tau],
-      utis_bg.Gamma_12,
-      utis_bg.Gamma_23,
-      utis_bg.Gamma_34,
-      utis_bg.Gamma_41,
-      utis_frac.f[index_utis_gap],
-      utis_frac.f[index_utis_eul],
-      utis_frac.f[index_utis_gyeong],
-      utis_frac.f[index_utis_shin],
-      utis_frac.df[index_utis_gap],
-      utis_frac.df[index_utis_eul],
-      utis_frac.df[index_utis_gyeong],
-      utis_frac.df[index_utis_shin],
-      dy[pba->index_bi_utis_f_gap],
-      dy[pba->index_bi_utis_f_eul],
-      dy[pba->index_bi_utis_f_gyeong],
-      dy[pba->index_bi_utis_f_shin]
-    );
-  }
+    /* DEBUG PRINT REMOVED *//* DEBUG PRINT REMOVED */}
 
   return _SUCCESS_;
 
