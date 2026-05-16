@@ -1,0 +1,28 @@
+# UTIS Q-24
+# 6-EUM CKM vs 6-YANG PMNS
+
+## CKM
+
+[[0.34187726 0.00908647 0.93970068]
+ [0.39157068 0.90769301 0.15088341]
+ [0.85427884 0.41953646 0.306915  ]]
+
+theta12 = 0.00908647457195433
+theta23 = 0.15088341474345104
+theta13 = 0.9397006843253214
+
+## PMNS
+
+[[0.63821411 0.70234566 0.31526708]
+ [0.6647055  0.58151025 0.46905482]
+ [0.38839329 0.41055622 0.82498136]]
+
+theta12 = 0.7023456585811496
+theta23 = 0.4690548213794294
+theta13 = 0.31526707669315607
+
+## UTIS INTERPRETATION
+
+CKM emerges from folded/localized 6-eum vacuum geometry.
+PMNS emerges from unfolded/cyclic 6-yang vacuum geometry.
+Flavor hierarchy is sourced by branch-ordering geometry.

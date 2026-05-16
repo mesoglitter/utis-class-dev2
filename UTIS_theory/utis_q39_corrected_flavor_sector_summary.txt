@@ -1,0 +1,44 @@
+
+UTIS Corrected Flavor Sector Summary
+===================================
+
+PMNS branch geometry
+--------------------
+charged branch winding = -10.0
+neutrino branch winding = 12.0
+charged asym = 0.06
+neutrino asym = -0.1
+
+PMNS angles
+-----------
+theta12 = 32.36083543210807
+theta23 = 50.54869847075757
+theta13 = 7.969471106996964
+
+CP
+--
+J      = -0.0280514392764339
+abs(J) = 0.0280514392764339
+
+Mass spectrum [eV]
+------------------
+m1 = 0.0011684767589265
+m2 = 0.0084861693030875
+m3 = 0.0501833173269379
+
+sum mnu = 0.059837963388952
+
+Mass splittings
+---------------
+dm21 = 7.064973150451313e-05
+dm31 = 0.002517
+
+Ratio
+-----
+R_pred = 0.0280690232437477
+R_obs  = 0.0294795391338895
+relative error = -0.047847284305753
+
+Cosmology
+---------
+below 0.12 eV = True

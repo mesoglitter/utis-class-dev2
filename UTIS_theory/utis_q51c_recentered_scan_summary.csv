@@ -1,0 +1,2 @@
+total_rows,physical_count,best_loss,best_scale,best_i13,best_theta12,best_theta23,best_theta13,best_J,best_absJ,best_cp_rel,best_beta_rel,best_phase_rel
+121500,33033,0.8971928282616249,3.1,-0.3,33.60499492604218,48.67119715689502,8.552415116745134,-0.03322818447961929,0.03322818447961929,0.075,-0.0115,0.076

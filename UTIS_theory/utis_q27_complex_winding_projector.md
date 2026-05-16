@@ -1,0 +1,39 @@
+# UTIS Q-27
+# COMPLEX WINDING PROJECTOR
+
+## BEST PARAMETERS
+
+w_ckm = 0.5
+w_pmns = 2.5
+spread = 1.6
+
+## CKM
+
+[[0.96560806 0.14767339 0.04790809]
+ [0.20475351 0.301209   0.06004842]
+ [0.00761109 0.07287182 0.31842823]]
+
+theta12 = 0.14767338831740032
+theta23 = 0.06004841649918704
+theta13 = 0.047908090884859304
+Jckm = -0.008658598943334947
+
+## PMNS
+
+[[0.51539619 0.23400852 0.37247809]
+ [0.47472326 0.27749403 0.58625952]
+ [0.38199338 0.29198168 0.38723084]]
+
+theta12 = 0.23400852408486109
+theta23 = 0.5862595150027182
+theta13 = 0.37247808755177675
+Jpmns = 0.002870043617315652
+
+score = 0.7939931675308436
+
+## INTERPRETATION
+
+CKM emerges from phase-locked folded vacuum.
+PMNS emerges from cyclic winding branch geometry.
+Complex winding projector generates nonlocal overlap.
+Integer / half-integer winding structure tested.
