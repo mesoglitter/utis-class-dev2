@@ -1,19 +1,6 @@
-output/
-*~
-build/
-class
-*.prof
-*.ini
-libclass.a
-*out
-python/classy.cpp
+.git/
+__pycache__/
 *.pyc
-python/build/
-*.dSYM
-RealSpaceInterface/cache/
+.ipynb_checkpoints/
 .DS_Store
-doc/manual/html
-doc/manual/latex
-
-# huge UTIS scan files
-UTIS_theory/utis_fast_ckm_cp_scan_Q20B.csv
+.cache/
