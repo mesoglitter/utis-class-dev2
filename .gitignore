@@ -7,3 +7,6 @@ __pycache__/
 
 # Auto exclude files >=100MB
 UTIS_theory/utis_q40d_reweighted_best.csv
+
+# Auto exclude files >=100MB
+UTIS_theory/utis_q40d_reweighted_best.csv
